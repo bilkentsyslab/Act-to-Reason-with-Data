@@ -35,8 +35,8 @@ plb.rcParams['font.size'] = 12
 ###########################
 #path = os.path.split(os.getcwd())[0]+'/Act to Reason - Original/experiments/some_title/level2/training/training_data/' # Path of the training files of interest
 
-model = "dynamic" # level1, level2, level3, dynamic
-path = os.path.split(os.getcwd())[0]+f'/ATR_Original/experiments/some_title/{model}/training/training_data/' # Path of the training files of interest
+model = "level1" # level1, level2, level3, dynamic
+path = os.path.split(os.getcwd())[0]+f'/Act-to-Reason-with-Data/ATR_Original/experiments/some_title/{model}/training/training_data/' # Path of the training files of interest
 
 ends = [] # Episode numbers at which retraining occurs, for instance [1500]
 FINAL_EP = 10000 # Number of training episodes
