@@ -10,8 +10,8 @@ cwd = os.getcwd()
 
 path = "ATR_Original\\experiments\\some_title\\" # Path of the main directory for this experiment no need to change for me 
 
-train = False
-simulate = True
+train = True
+simulate = False
 
 ##########################################
 # PARAMETERS THAT ARE CHANGED FREQUENTLY #
@@ -186,7 +186,7 @@ if simulate:
             boltzmann_sampling = True # If true, agents select action via Boltzmann sampling
 
             # Simulation Configuration Parameters           
-            num_episodes = 10 # Number of episodes for each population group
+            num_episodes = 250 # Number of episodes for each population group
             car_population = [ 12, 16, 20, 24 ] # List used for changing population
             ego_lane = -1 # -1: Random / 0: Lane-0 (Ramp) / 1: Lane-1 (Main Road)
             add_car_prob = 0.7 # Add a new car with this probability when enough space is available in the beginning of the road
