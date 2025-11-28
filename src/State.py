@@ -463,7 +463,7 @@ class State:
         s = 0
         if self.cars_info2[0,0] == 1: # Main Road Case
             # if (self.cars_info[2,0] <= -Params.hard_decel_rate*Params.timestep or self.cars_info2[1,0] != 4) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
-            if (self.cars_info2[1,0] != 1) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
+            if (self.cars_info2[1,0] not in (1, 3)) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
                 s = -1  # Penalize if the vehicle is too far behind and not accelerating
                 #print("a")
             else:

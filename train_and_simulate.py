@@ -1,3 +1,34 @@
+"""
+This file is used to train and simulate the agents in the highway merging environment.
+
+To start off the training or simulation process, set the 'train' or 'simulate' variables to True respectively.
+To train level 1 agent, set 'ego_level' to 1. Similarly, set it to 2, 3, or 4 for level 2, level 3, or dynamic agents.
+For the surrounding vehicles, specify the models for level-k agents in the 'models' dictionary.
+You may directly take the 99th model of each level as the trained model for that level,
+or simulate the last 5-10 models with the lower level models to see which model performs better.
+To do simulation, set the 'sim_vs' variable to the desired level-k environment type, and 'sim_ego_models' to the desired model of the ego agent.
+To do retraining, set 'retrain' to True and fill in the 'first_state_reset' variable. This is useful when you want to continue training from a previously trained model.
+
+Example configurations:
+1. To train a level-1 agent against level-0 agents:
+   - Set 'train' to True
+   - Set 'ego_level' to 1
+   - Set 'models' to {1: None, 2: None, 3: None, 4: None}
+2. To simulate a level-2 agent using model 95 against level-1 agents using model 99:
+   - Set 'simulate' to True
+   - Set 'ego_level' to 2
+   - Set 'models' to {1: 99, 2: None, 3: None, 4: None}
+   - Set 'sim_vs' to [1]
+   - Set 'sim_ego_models' to [95]
+3. To retrain a dynamic agent from model 10:
+   - Set 'train' to True
+   - Set 'ego_level' to 4
+   - Set 'models' to {1: 99, 2: 99, 3: 99, 4: None}
+   - Set 'retrain' to True
+   - Set 'first_state_reset' to 11
+
+"""
+
 #def train_and_simulate_time():
 from src.Training import Training
 from src.Simulation import Simulation

@@ -1,4 +1,7 @@
-#This file implements the visualization of simulated episode
+"""
+This file implements the visualization of simulated episodes
+Set up the parameters in the main() function to visualize the desired episodes.
+"""
 # © 2021 Cevahir Köprülü All Rights Reserved
 
 from tkinter import Tk, Canvas, Frame, BOTH, BOTTOM, TOP, StringVar, Label, PhotoImage
@@ -301,9 +304,9 @@ def main():
     directory = '/level1/simulation';
     
     num_pop_groups = 4 # Number of population groups simulated
-    num_episodes = 10 # Number of episodes simulated for each population group(number of cars varies in that group)
+    num_episodes = 200 # Number of episodes simulated for each population group(number of cars varies in that group)
     ego_type = "1_m99"
-    vs_type = "0" # "1_m95",
+    vs_type = "0" # "1_m95"
     
     eps_file = "successful_eps.pickle"
     #eps_file = "long_eps.pickle"

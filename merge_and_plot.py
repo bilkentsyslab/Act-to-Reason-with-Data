@@ -1,3 +1,27 @@
+"""
+    Processes and visualizes training data from a Reinforcement Learning (RL) experiment.
+
+    The script reads raw data files (reward, collision status, training history/Q-loss, 
+    crash history, and ego-vehicle data) from specified directories, potentially merging 
+    data across multiple retraining phases ('ends' list). It then calculates running 
+    averages for various metrics using specified window sizes (Nw_*) and generates 
+    a series of matplotlib plots to visualize the agent's performance and learning 
+    progress over steps and episodes.
+
+    The generated plots include:
+    1. Average Reward vs Step (Smoothened).
+    2. Q-Loss Progression vs Step (Scatter and Line, Smoothened).
+    3. Average Weight Progression vs Step.
+    4. Average Bias Progression vs Step.
+    5. Average Reward vs Episode (Raw and Smoothened 'Reward per Episode').
+    6. Complete Average Reward vs Episode subplots (by 1000 episode blocks).
+    7. Focused Average Reward vs Episode subplots (by 100 episode blocks).
+    8. Merges crash and ego-vehicle history CSV files.
+
+    Returns:
+        None: The function saves generated plots and merged data files to the specified 'path'.
+"""
+
 import csv
 import os
 import numpy as np
