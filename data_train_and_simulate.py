@@ -275,9 +275,7 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
     # Main Road Case
     if ego_lane == 1:  # Ego is on the main road
         # Penalize if the ego is too far behind, not accelerating, or decelerating unnecessarily
-        if acc >= 1.25 and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging <= 0):
-            s = 1 # Reward for accelerating in safe conditions
-        elif acc <= -1.1 and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging <= 0):
+        if acc <= 1.25 and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging <= 0):
             s = -1 # Penalize for not accelerating in safe conditions
         else:
             s = 0  # No penalty if conditions are met
@@ -288,7 +286,7 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
         # Inside the merging region
         if dist_end_merging < Params.merging_region_length:
             # Penalize if not merging while it's safe
-            if merged != 5:
+            if merged != True:
                 if fl_d >= Params.close_distance and abs(rl_d) >= (1.5 * Params.far_distance):
                     s = -1  # Penalize for not merging when safe
                     # print("Ramp: Penalize for not merging in safe conditions")
