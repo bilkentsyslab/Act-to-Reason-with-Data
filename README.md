@@ -1,4 +1,3 @@
-````markdown
 # I-80 Trajectory Simulation and Model Calibration Project 🚗💨
 
 This project involves the development of **Level-K** and **Dynamic Agent** models for vehicle merging behavior, followed by a data calibration and verification process using I-80 trajectory data.
