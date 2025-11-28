@@ -1,4 +1,4 @@
-# I-80 Trajectory Simulation and Model Calibration Project 🚗💨
+# I-80 Trajectory Simulation and Model Calibration Project 
 
 This project involves the development of **Level-K** and **Dynamic Agent** models for vehicle merging behavior, followed by a data calibration and verification process using I-80 trajectory data.
 
@@ -25,9 +25,10 @@ This part focuses on building and simulating the Level-K (K=1, 2, 3) and uncalib
 
 ### 1.1 Run Model Training and Simulation
 
-Execute the main script to train and simulate the core models.
+The `train_and_simulate.py` script is the primary execution file for building and running the Level-K and baseline Dynamic Agent models.
 
-* Run the script:
+* **Before running:** Open the `train_and_simulate.py` file and consult the **docstrings** or **main function parameters** to configure the specific models (Level-K, Dynamic) and simulation settings you wish to execute.
+* Run the script after configuration:
     ```bash
     python train_and_simulate.py
     ```
