@@ -20,7 +20,7 @@ Before running any scripts, you must set up the required Python environment usin
 
 ---
 
-## 🛠️ Part 1: Model Building and Basic Simulation (Level-K & Dynamic)
+## Part 1: Model Building and Basic Simulation (Level-K & Dynamic)
 
 This part focuses on building and simulating the Level-K (K=1, 2, 3) and uncalibrated Dynamic Agent models.
 
@@ -90,5 +90,3 @@ This stage runs the simulations for various agent models, using the generated sc
 | `data_simulate_levelk.py` | Simulates the **Level-K** model (e.g., K=1, 2, or 3). | Set the desired value for **`k`** (e.g., `1`, `2`, or `3`) directly in the script. | Run `frechet_analyzer.py`. |
 | `data_simulate_IDM.py` | Simulates the classical **IDM + MOBIL** traffic model. | Run script. | Run `frechet_analyzer.py`. |
 ````
-
-Would you like me to generate a brief summary for the top of the README?
