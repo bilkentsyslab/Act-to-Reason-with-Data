@@ -89,4 +89,3 @@ This stage runs the simulations for various agent models, using the generated sc
 | `data_simulate_original_dynamic.py` | Simulates the **non-calibrated** dynamic agent (baseline behavior). | Run script. | Run `frechet_analyzer.py`. |
 | `data_simulate_levelk.py` | Simulates the **Level-K** model (e.g., K=1, 2, or 3). | Set the desired value for **`k`** (e.g., `1`, `2`, or `3`) directly in the script. | Run `frechet_analyzer.py`. |
 | `data_simulate_IDM.py` | Simulates the classical **IDM + MOBIL** traffic model. | Run script. | Run `frechet_analyzer.py`. |
-````
