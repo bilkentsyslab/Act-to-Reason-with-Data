@@ -1,0 +1,7 @@
+ATR_Original/experiments/
+data/5sec_scenarios/
+data/vehicles
+data/ego_ids/
+NGSIM_I80_results/
+src/__pycache__/
+__pycache__/
