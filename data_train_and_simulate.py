@@ -16,8 +16,8 @@ import shutil
 import pickle
 warnings.simplefilter(action='ignore', category=FutureWarning) # not to see futurewarning warning
 
-Simulate = True
-Train = False
+Simulate = False
+Train = True
 
 if Simulate:
     from src.data_DynamicDQNAgent_sim import DynamicDQNAgent
@@ -208,9 +208,9 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
     wv = 10 * scale * performance # Velocity
     we = 5 * scale #*performance # Effort
     wh = 5 * scale # Headway
-    wnm = 50 * scale #*performance # Not Merging
+    wnm = 5 * scale #*performance # Not Merging
     ws = 30 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
-    w7 = 30 #TODO tune
+    w7 = 60 #TODO tune
     w8 = -150 #TODO tune
 
     # Collision parameter
@@ -301,12 +301,13 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
             if ego_velocity < -Params.hard_decel_rate*Params.timestep and fc_d >= Params.far_distance:
                 s = -1  # Penalize for not accelerating or preparing to merge
 
+    lambda_x = 0.1
     ox = 0
     if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
         frechet_prev = abs(simulated_trajectory[-2] - real_trajectory[-2])
         frechet_now = abs(simulated_trajectory[-1] - real_trajectory[-1])
 
-        ox = (frechet_prev-frechet_now)
+        ox = (frechet_prev-frechet_now) - lambda_x * frechet_now
 
 
 
