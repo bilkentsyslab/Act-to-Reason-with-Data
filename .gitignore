@@ -5,3 +5,4 @@ data/ego_ids/
 NGSIM_I80_results/
 src/__pycache__/
 __pycache__/
+*.pyc
