@@ -16,17 +16,17 @@ import shutil
 import pickle
 warnings.simplefilter(action='ignore', category=FutureWarning) # not to see futurewarning warning
 
-Simulate = False
-Train = True
+Simulate = True
+Train = False
 
 if Simulate:
     from src.data_DynamicDQNAgent_sim import DynamicDQNAgent
 if Train:
     from src.data_DynamicDQNAgent import DynamicDQNAgent
 
-MODEL_DATA = 2164 # The model from data that will be used # for simulation
-EPOCH_NO = "epoch_0" # which env no the model above belongs to # for simulation
-NUM_EPOCHS = 5
+MODEL_DATA = 4329 # The model from data that will be used # for simulation
+EPOCH_NO = "epoch_1" # which env no the model above belongs to # for simulation
+NUM_EPOCHS = 2 if Train else 1
 SCENARIO_ITERATION = 5
 NUM_SCENARIOS = 433 #ONLY FOR TRAINING
 boltzmann_decay_end_state = NUM_EPOCHS*SCENARIO_ITERATION*NUM_SCENARIOS // 2 # multiply it by episode numbers per num epochs 
@@ -210,7 +210,7 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
     wh = 5 * scale # Headway
     wnm = 5 * scale #*performance # Not Merging
     ws = 30 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
-    w7 = 60 #TODO tune
+    w7 = 100 #TODO tune
     w8 = -150 #TODO tune
 
     # Collision parameter
@@ -273,33 +273,34 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
 
     s = 0
     # Main Road Case
-    if ego_lane == 1:  # Ego is on the main road
-        # Penalize if the ego is too far behind, not accelerating, or decelerating unnecessarily
-        if acc <= 1.25 and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging <= 0):
-            s = -1 # Penalize for not accelerating in safe conditions
-        else:
-            s = 0  # No penalty if conditions are met
-            # print("Main road: No penalty")
-
-    # Ramp Case
-    elif ego_lane == 0:  # Ego is on the ramp
-        # Inside the merging region
-        if dist_end_merging < Params.merging_region_length:
-            # Penalize if not merging while it's safe
-            if merged != True:
-                if fl_d >= Params.close_distance and abs(rl_d) >= (1.5 * Params.far_distance):
-                    s = -1  # Penalize for not merging when safe
-                    # print("Ramp: Penalize for not merging in safe conditions")
-                elif dist_end_merging <= Params.far_distance:
-                    s = -0.05  # Small penalty for stopping too close to the merging zone end
-                    # print("Ramp: Small penalty for being close to merging zone end")
+    if ego_velocity < -Params.hard_decel_rate*Params.timestep: 
+        if ego_lane == 1:  # Ego is on the main road
+            # Penalize if the ego is too far behind, not accelerating, or decelerating unnecessarily
+            if acc <= 1.25 and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging <= 0):
+                s = -1 # Penalize for not accelerating in safe conditions
             else:
-                s = 0  # No penalty for merging
+                s = 0  # No penalty if conditions are met
+                # print("Main road: No penalty")
 
-        # Outside the merging region
-        else:
-            if ego_velocity < -Params.hard_decel_rate*Params.timestep and fc_d >= Params.far_distance:
-                s = -1  # Penalize for not accelerating or preparing to merge
+        # Ramp Case
+        elif ego_lane == 0:  # Ego is on the ramp
+            # Inside the merging region
+            if dist_end_merging < Params.merging_region_length:
+                # Penalize if not merging while it's safe
+                if merged != True:
+                    if fl_d >= Params.close_distance and abs(rl_d) >= (1.5 * Params.far_distance):
+                        s = -1  # Penalize for not merging when safe
+                        # print("Ramp: Penalize for not merging in safe conditions")
+                    elif dist_end_merging <= Params.far_distance:
+                        s = -0.05  # Small penalty for stopping too close to the merging zone end
+                        # print("Ramp: Small penalty for being close to merging zone end")
+                else:
+                    s = 0  # No penalty for merging
+
+            # Outside the merging region
+            else:
+                if fc_d >= Params.far_distance:
+                    s = -1  # Penalize for not accelerating or preparing to merge
 
     lambda_x = 0.1
     ox = 0
