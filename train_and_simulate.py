@@ -4,6 +4,7 @@ This file is used to train and simulate the agents in the highway merging enviro
 To start off the training or simulation process, set the 'train' or 'simulate' variables to True respectively.
 To train level 1 agent, set 'ego_level' to 1. Similarly, set it to 2, 3, or 4 for level 2, level 3, or dynamic agents.
 For the surrounding vehicles, specify the models for level-k agents in the 'models' dictionary.
+After training, make sure the training went well by running the merge_and_plot.py file to visualize the results.
 You may directly take the 99th model of each level as the trained model for that level,
 or simulate the last 5-10 models with the lower level models to see which model performs better.
 To do simulation, set the 'sim_vs' variable to the desired level-k environment type, and 'sim_ego_models' to the desired model of the ego agent.
@@ -62,8 +63,8 @@ dynamic_driving_boltzmann_sampling = True # Dynamic agent setting: Driving actio
 rnd_levk_env_eps = 1 # Dynamic agent setting: Num of episodes in series to create environment with randomly selected level-k strategy
 dynamic_vs = -1 # Dynamic agent setting: -2: Rnd Single, -1: Rnd Mixed
 # Retraining
-retrain = False # Retraining: Restart training from a specified state
-first_state_reset = 11 # Retraining: The model to load is numbered as $first_state_reset - 1$
+retrain = True # Retraining: Restart training from a specified state
+first_state_reset = 75 # Retraining: The model to load is numbered as $first_state_reset - 1$
                       # for instance, if you want to retrain from model 10, put 11 here
 ##################  ########################
 # ONLY Simulation
