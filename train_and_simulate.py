@@ -63,7 +63,7 @@ dynamic_driving_boltzmann_sampling = True # Dynamic agent setting: Driving actio
 rnd_levk_env_eps = 1 # Dynamic agent setting: Num of episodes in series to create environment with randomly selected level-k strategy
 dynamic_vs = -1 # Dynamic agent setting: -2: Rnd Single, -1: Rnd Mixed
 # Retraining
-retrain = True # Retraining: Restart training from a specified state
+retrain = False # Retraining: Restart training from a specified state
 first_state_reset = 75 # Retraining: The model to load is numbered as $first_state_reset - 1$
                       # for instance, if you want to retrain from model 10, put 11 here
 ##################  ########################
