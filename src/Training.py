@@ -1056,7 +1056,7 @@ class Training():
                         # Experience replay, returned value is the MSE between
                         # the target model output and the main moedl output
                         current_training_loss = 0
-                        if total_timesteps > replay_start_size and total_timesteps % 4 == 0:
+                        if total_timesteps > replay_start_size and total_timesteps % 4 == 0: # experience replay every 4 steps
                             current_training_loss = self.training_agent.replay(batch_size)[0] #Experience replay
                         
                         # Record training loss and average weight/bias for training history
