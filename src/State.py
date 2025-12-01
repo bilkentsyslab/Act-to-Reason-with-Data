@@ -461,31 +461,32 @@ class State:
         rl_d = nextstate[4]*Params.max_sight_distance
         dist_end_merging = nextstate[-1]*Params.merging_region_length 
         s = 0
-        if self.cars_info2[0,0] == 1: # Main Road Case
-            # if (self.cars_info[2,0] <= -Params.hard_decel_rate*Params.timestep or self.cars_info2[1,0] != 4) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
-            if (self.cars_info2[1,0] not in (1, 3)) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
-                s = -1  # Penalize if the vehicle is too far behind and not accelerating
-                #print("a")
-            else:
-                s = 0  # No penalty otherwise
-                #print("b")
-        elif self.cars_info2[0,0] == 0: # ramp
-            if (dist_end_merging < Params.merging_region_length): # inside merging region
-                if self.cars_info2[1,0] != 5:
-                    if fl_d >= Params.close_distance and abs(rl_d) >= (1.5 * Params.far_distance):
-                        s = -1  # Penalize if the ego vehicle is not merging while it is safe to
-                        # print("c")
-                        # TODO almost like nm parameter, is this ok?
-                    elif dist_end_merging <= Params.far_distance:
-                        s = -0.05  # Small penalty for stopping close to the end of the merging zone. it may not be safe to merge.
-                        # print("d")
+        if self.cars_info[2,0] <= -Params.hard_decel_rate*Params.timestep: # velocity is small enough
+            if self.cars_info2[0,0] == 1: # Main Road Case
+                # if (self.cars_info[2,0] <= -Params.hard_decel_rate*Params.timestep or self.cars_info2[1,0] != 4) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
+                if (self.cars_info2[1,0] not in (1, 3)) and fc_d >= Params.far_distance and (dist_end_merging >= Params.far_distance or dist_end_merging < 0):
+                    s = -1  # Penalize if the vehicle is too far behind and not accelerating
+                    #print("a")
                 else:
                     s = 0  # No penalty otherwise
-                    # print("e")
-            else: # not yet in the merging region
-                if self.cars_info[2,0] <= -Params.hard_decel_rate*Params.timestep and fc_d >= Params.far_distance:
-                    s = -1
-                    # print("f")
+                    #print("b")
+            elif self.cars_info2[0,0] == 0: # ramp
+                if (dist_end_merging < Params.merging_region_length): # inside merging region
+                    if self.cars_info2[1,0] != 5:
+                        if fl_d >= Params.close_distance and abs(rl_d) >= (1.5 * Params.far_distance):
+                            s = -1  # Penalize if the ego vehicle is not merging while it is safe to
+                            # print("c")
+                            # TODO almost like nm parameter, is this ok?
+                        elif dist_end_merging <= Params.far_distance:
+                            s = -0.05  # Small penalty for stopping close to the end of the merging zone. it may not be safe to merge.
+                            # print("d")
+                    else:
+                        s = 0  # No penalty otherwise
+                        # print("e")
+                else: # not yet in the merging region
+                    if fc_d >= Params.far_distance: # and it is slow despite the space in front
+                        s = -1
+                        # print("f")
 
         return wc*c + wv*v + we*e + wh*h + wnm*nm + ws*s #+ wm*m
 
