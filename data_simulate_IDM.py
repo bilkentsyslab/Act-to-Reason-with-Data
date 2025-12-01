@@ -109,7 +109,7 @@ point_distances = []
 
 class IDM_MOBIL():
     # Intelligent Driver Model with Minimizing Overall Braking Induced by Lane change
-    def __init__(self, v_0=Params.nominal_speed, T=1.5, s_0= 2 , a=1.5, b=3):
+    def __init__(self, v_0=Params.nominal_speed, T=1.5, s_0= 2 , a=1.5, b=3): # params from Kesting, Treiber, and Helbing 
         self.a = a  # Maximum acceleration
         self.T = T  # Safe time headway 
         self.s_0 = s_0  # Minimum gap (front bumper to rear bumper)
