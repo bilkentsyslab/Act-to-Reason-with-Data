@@ -30,6 +30,6 @@ def calculate_velocity_stats(filename):
     return velocity_mean, velocity_std  
 
 # Example usage:
-filename = "data/analysis/RECONSTRUCTED trajectories-400-0415_NO MOTORCYCLES.csv"
+filename = "src/RECONSTRUCTED trajectories-400-0415_NO MOTORCYCLES.csv"
 velocity_mean, velocity_std = calculate_velocity_stats(filename)
 print(f"Velocity mean: {velocity_mean:.2f}, Velocity std: {velocity_std:.2f}")
