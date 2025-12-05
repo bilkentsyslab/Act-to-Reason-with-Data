@@ -396,7 +396,7 @@ class State:
         we = 5 * scale #*performance # Effort
         wh = 5 * scale # Headway
         wnm = 5 * scale #*performance # Not Merging
-        ws = 5 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
+        ws = 60 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
         # wm = 100
     
         c = 0
@@ -485,7 +485,7 @@ class State:
                         # print("e")
                 else: # not yet in the merging region
                     if fc_d >= Params.far_distance: # and it is slow despite the space in front
-                        s = -1
+                        s = -0.20
                         # print("f")
 
         return wc*c + wv*v + we*e + wh*h + wnm*nm + ws*s #+ wm*m

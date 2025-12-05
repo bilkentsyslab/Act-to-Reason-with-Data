@@ -42,8 +42,8 @@ cwd = os.getcwd()
 
 path = "ATR_Original\\experiments\\some_title\\" # Path of the main directory for this experiment no need to change for me 
 
-train = True
-simulate = False
+train = False
+simulate = True
 
 ##########################################
 # PARAMETERS THAT ARE CHANGED FREQUENTLY #
@@ -52,7 +52,7 @@ simulate = False
 ego_level = 1 # Level-k Policy for ego (0: Level-0, 1: Level-1, 2: Level-2, 3: Level-3, 4: Dynamic)
 # Level-k Models (for surrounding vehicles)
 # "None" for ego's and unused levels
-models = {1: None, # Level-1 Model
+models = {1: 98, # Level-1 Model
         2: None, # Level-2 Model
         3: None, # Level-3 Modelwe   
         4: None} # Dynamic Model
@@ -63,13 +63,13 @@ dynamic_driving_boltzmann_sampling = True # Dynamic agent setting: Driving actio
 rnd_levk_env_eps = 1 # Dynamic agent setting: Num of episodes in series to create environment with randomly selected level-k strategy
 dynamic_vs = -1 # Dynamic agent setting: -2: Rnd Single, -1: Rnd Mixed
 # Retraining
-retrain = False # Retraining: Restart training from a specified state
-first_state_reset = 75 # Retraining: The model to load is numbered as $first_state_reset - 1$
+retrain = True # Retraining: Restart training from a specified state
+first_state_reset = 85 # Retraining: The model to load is numbered as $first_state_reset - 1$
                       # for instance, if you want to retrain from model 10, put 11 here
 ##################  ########################
 # ONLY Simulation
 sim_save_ego_df = True # Save only ego information into csv file
-sim_ego_models = [99] # Ego models to be iterated during the simulation / model no 99 etc.
+sim_ego_models = [97] # Ego models to be iterated during the simulation / model no 99 etc.
 sim_vs = [0] # Environment type list to be iterated during the simulation with 1,2,3 etc.
 ##########################################
 

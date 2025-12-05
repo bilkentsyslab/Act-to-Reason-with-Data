@@ -38,7 +38,7 @@ plb.rcParams['font.size'] = 12
 model = "level1" # level1, level2, level3, dynamic
 path = os.path.split(os.getcwd())[0]+f'/Act-to-Reason-with-Data/ATR_Original/experiments/some_title/{model}/training/training_data/' # Path of the training files of interest
 
-ends = [] # Episode numbers at which retraining occurs, for instance [1500]
+ends = [8500] # Episode numbers at which retraining occurs, for instance [1500]
 FINAL_EP = 10000 # Number of training episodes
 complete_rew_subplot = [4,4] # "Reward Per Episode" subplot structure (Every subplot covers 1000 episodes)
 focused_subplot = [3,4] # Focused average episode subplot structure (Every subplot covers 100 episodes)
