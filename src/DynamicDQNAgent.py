@@ -357,7 +357,7 @@ class DynamicDQNAgent:
             self.target_model.load_weights(tfname) 
             
     #Saves the model, and the target weights for retraining
-    def save(self, fname, run_no,  tfname="",  backup = False):
+    def save(self, fname,  tfname="",  backup = False):
         self.model.save(fname)
         if backup:
             self.target_model.save_weights(tfname)
