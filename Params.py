@@ -23,12 +23,9 @@ class Params:
     carwidth = 2
     lanewidth = 3.7 # ~12 feet
 
-    # For pdf analysis, headway limit is set as 70m
-    # Mean = 11.9m
-    # STD = 9.6m
-    close_distance = 2.3
-    nominal_distance = 11.9
-    far_distance = 21.5
+    close_distance = 3.0 # 2.3
+    nominal_distance = 18.0 # 11.9
+    far_distance = 25.0 # 21.5
     min_initial_separation = carlength*2
     max_sight_distance = 70
     
