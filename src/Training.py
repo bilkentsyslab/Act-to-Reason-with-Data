@@ -1158,8 +1158,8 @@ class Training():
                 path = self.file_config["path"]
                 directory = self.file_config["directory"]
                 #Save the weights at the end of each 100 episodes
-                fname = './'+path+directory+'/models/model'+str(state_no)
-                tfname = './'+path+directory+'/target_weights/target_weight'+str(state_no)+'.h5'
+                fname = path+directory+'/models/model'+str(state_no)
+                tfname = path+directory+'/target_weights/target_weight'+str(state_no)+'.h5'
             
                 self.training_agent.save(fname,tfname, backup=True)
                 self.training_agent.save_memory(path+directory+
