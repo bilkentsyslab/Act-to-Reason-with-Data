@@ -485,7 +485,7 @@ class State:
                         # print("e")
                 else: # not yet in the merging region
                     if fc_d >= Params.far_distance: # and it is slow despite the space in front
-                        s = -0.20
+                        s = -1.00
                         # print("f")
 
         return wc*c + wv*v + we*e + wh*h + wnm*nm + ws*s #+ wm*m
