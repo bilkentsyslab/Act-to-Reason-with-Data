@@ -333,7 +333,7 @@ class DynamicDQNAgent:
         with open(fname, "rb") as input_file:
             self.memory = pickle.load(input_file)
     
-    def save_memory(self,fname, episode_no, run_no):
+    def save_memory(self,fname):
         with open(fname , "wb") as output_file:
             pickle.dump(self.memory, output_file)
             
@@ -345,7 +345,7 @@ class DynamicDQNAgent:
         return total_timesteps
     
     #Saves the last Boltzmann temperature and total timesteps
-    def save_config(self, total_timesteps, config_fname, episode_no, run_no):
+    def save_config(self, total_timesteps, config_fname):
         with open(config_fname ,  "wb") as output_file:
             # pickle.dump([self.T,self.epsilon, total_timesteps], output_file)
             pickle.dump([self.T, total_timesteps], output_file)
