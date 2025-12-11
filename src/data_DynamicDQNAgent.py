@@ -28,7 +28,7 @@ class DynamicDQNAgent:
         self.action_size = action_size
         self.memory = deque(maxlen=50000) #experience set, i.e. memory
         self.gamma = 0.95    # discount rate
-        self.learning_rate = 0.002
+        self.learning_rate = 0.001 # TODO check
         self.model = self._build_model()
         self.target_model = self._build_model()
         self.T_SCALE = 1.0
@@ -60,10 +60,11 @@ class DynamicDQNAgent:
         model.add(Dense(256, activation='relu'))  # Hidden Layer 1
         model.add(Dense(256, activation='relu'))  # Hidden Layer 2
         model.add(Dense(128, activation='relu'))  # Hidden Layer 3
-        
-        # Output Layer 
         model.add(Dense(self.dynamic_action_size *3 + 1, activation='linear', kernel_initializer=HeNormal())) #each level-k agent has 3 actions         
-        model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))
+
+        # Output Layer
+        opt = Adam(learning_rate=self.learning_rate, clipnorm=1.0)  # TODO check # ↓ LR + gradient clipping
+        model.compile(loss=tf.keras.losses.Huber(delta=1.0), optimizer=opt) # TODO check # Huber > MSE for outliers
         return model
     
     #Loads level-k agent model in the given path
@@ -126,7 +127,9 @@ class DynamicDQNAgent:
             # q_values[3] = tf.clip_by_value(q_values[3], -5, 5)  # Limit extreme values
 
             greedy = np.argmax(act_values)
-            exp_values = softmax(act_values / self.T)
+            # exp_values = softmax(act_values / self.T)
+            z = act_values - np.max(act_values)  # TODO check # stability
+            exp_values = softmax(z / self.T) # TODO check
             rand = np.random.rand()
 
             if get_qvals:  # Return Q values with action-related information
@@ -228,7 +231,9 @@ class DynamicDQNAgent:
             if remove_merging:
                 q_values_batch = q_values_batch[:, :5]
 
-            exp_values_batch = softmax(q_values_batch / self.T, axis=1)
+            # exp_values_batch = softmax(q_values_batch / self.T, axis=1)
+            z = q_values_batch - np.max(q_values_batch, axis=1, keepdims=True) # TODO check
+            exp_values_batch = softmax(z / self.T, axis=1) # TODO check
 
             select_levk = np.zeros((q_values_batch.shape[0]))
             acts = np.zeros((q_values_batch.shape[0]))
@@ -408,6 +413,9 @@ class DynamicDQNAgent:
         # random_weights = [np.random.randn(*w.shape) for w in new_weights]
         # self.model.set_weights(random_weights)
         
+        # 🔧 CRITICAL: keep target model identical right now
+        self.update_target_model() # TODO check
+
         # If retraining is needed, load target model weights
         if retrain:
             self.target_model.load_weights(tfname)
