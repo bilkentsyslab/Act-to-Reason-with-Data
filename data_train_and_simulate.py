@@ -24,15 +24,15 @@ if Simulate:
 if Train:
     from src.data_DynamicDQNAgent import DynamicDQNAgent
 
-MODEL_DATA = 4329 # The model from data that will be used # for simulation
-EPOCH_NO = "epoch_1" # which env no the model above belongs to # for simulation
-NUM_EPOCHS = 2 if Train else 1
+MODEL_DATA = 10824 # The model from data that will be used # for simulation
+EPOCH_NO = "epoch_4" # which env no the model above belongs to # for simulation
+NUM_EPOCHS = 5 if Train else 1
 SCENARIO_ITERATION = 5
 NUM_SCENARIOS = 433 #ONLY FOR TRAINING
 boltzmann_decay_end_state = NUM_EPOCHS*SCENARIO_ITERATION*NUM_SCENARIOS // 2 # multiply it by episode numbers per num epochs 
 
 MODEL_LEVEL1 = 99 # Model number of the level1 DQN
-MODEL_LEVEL2 = 99 # Model number of the level2 DQN
+MODEL_LEVEL2 = 95 # Model number of the level2 DQN
 MODEL_LEVEL3 = 99 # Model number of the level3 DQN
 MODEL_DYNAMIC = 99  # Model number of the dynamic DQN
 
@@ -202,16 +202,16 @@ def remember_frame(currentstate, actionget,  state_messages, reward, collided,
 
 def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_merging, x_training, x_data, lane_training, lane_data, acc, merged, real_trajectory, simulated_trajectory):
     performance = 1.0
-    scale = 1 # 0.02
+    scale = 0.2 # 0.02
     
     wc = 1000 * scale # 1000 # Collision
     wv = 10 * scale * performance # Velocity
     we = 5 * scale #*performance # Effort
     wh = 5 * scale # Headway
-    wnm = 5 * scale #*performance # Not Merging
+    wnm = 50 * scale #*performance # Not Merging
     ws = 30 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
-    w7 = 100 #TODO tune
-    w8 = -150 #TODO tune
+    w7 = 30 * scale #TODO tune
+    w8 = -150 * scale #TODO tune
 
     # Collision parameter
     c = 0
@@ -302,7 +302,7 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
                 if fc_d >= Params.far_distance:
                     s = -1  # Penalize for not accelerating or preparing to merge
 
-    lambda_x = 0.1
+    lambda_x = 0.05
     ox = 0
     if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
         frechet_prev = abs(simulated_trajectory[-2] - real_trajectory[-2])

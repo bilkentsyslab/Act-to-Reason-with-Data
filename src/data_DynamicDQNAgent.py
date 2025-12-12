@@ -63,7 +63,7 @@ class DynamicDQNAgent:
         model.add(Dense(self.dynamic_action_size *3 + 1, activation='linear', kernel_initializer=HeNormal())) #each level-k agent has 3 actions         
 
         # Output Layer
-        opt = Adam(learning_rate=self.learning_rate, clipnorm=1.0)  # TODO check # ↓ LR + gradient clipping
+        opt = Adam(learning_rate=self.learning_rate, clipnorm=1.0, clipvalue=0.1)  # TODO check # ↓ LR + gradient clipping
         model.compile(loss=tf.keras.losses.Huber(delta=1.0), optimizer=opt) # TODO check # Huber > MSE for outliers
         return model
     
