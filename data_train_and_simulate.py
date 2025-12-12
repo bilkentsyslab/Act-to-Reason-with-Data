@@ -200,7 +200,7 @@ def remember_frame(currentstate, actionget,  state_messages, reward, collided,
                                         reward, state_messages, 
                                         (collided or ego_reached_end))
 
-def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_merging, x_training, x_data, lane_training, lane_data, acc, merged, real_trajectory, simulated_trajectory):
+def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_merging, x_training, x_data, lane_training, lane_data, acc, merged, real_trajectory, simulated_trajectory, is_terminal):
     performance = 1.0
     scale = 0.2 # 0.02
     
@@ -210,7 +210,7 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
     wh = 5 * scale # Headway
     wnm = 5 * scale #*performance # Not Merging
     ws = 30 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
-    w7 = 100 * scale #TODO tune
+    w7 = 200 * scale #TODO tune
     w8 = -50 * scale #TODO tune
 
     # Collision parameter
@@ -311,12 +311,17 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
 
     #     ox = (frechet_prev-frechet_now) - lambda_x * frechet_now
 
-    F_MAX = 20.0
-    if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
-        frechet_now = abs(simulated_trajectory[-1] - real_trajectory[-1])
-        d = min(frechet_now, F_MAX)
-        ox = -(d / F_MAX) # normalize between -1 and 0
+    # F_MAX = 20.0
+    # if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
+    #     frechet_now = abs(simulated_trajectory[-1] - real_trajectory[-1])
+    #     d = min(frechet_now, F_MAX)
+    #     ox = -(d / F_MAX) # normalize between -1 and 0
 
+    F_MAX = 30.0
+    if is_terminal and len(simulated_trajectory) >= 2:
+        frechet_dist = frechet(real_trajectory, simulated_trajectory)
+        d = min(frechet_dist, F_MAX)
+        ox = -(d / F_MAX)
 
     # Calibration term for y-axis (lane offset oy)
     oy = 1 if int(lane_training) != lane_data else 0
@@ -772,7 +777,10 @@ def run_episode(ego_log, total_timesteps, final_state_df, episode_no, run_no, eg
         reward = get_reward(crash=collided, state_messages=state_messages, 
                             ego_velocity=state_messages[6], ego_lane=state_messages[7], 
                             fc_d=state_messages[2], dist_end_merging=state_messages[8]    , 
-                            x_training=x_training, x_data=x_data, lane_training=state_messages[7], lane_data=lane_data, acc =acc, merged= merged, real_trajectory=real_trajectory, simulated_trajectory=simulated_trajectory)
+                            x_training=x_training, x_data=x_data, lane_training=state_messages[7],
+                            lane_data=lane_data, acc =acc, merged= merged,
+                            real_trajectory=real_trajectory, simulated_trajectory=simulated_trajectory,
+                            is_terminal = (ego_reached_end or collided))
         reward_table.append(reward)
         save_rewards([reward], file_path=f"{DATA_TRAINING_PATH}/training_history/rewards_scenario.csv", reset=False)
         total_timesteps += 1
