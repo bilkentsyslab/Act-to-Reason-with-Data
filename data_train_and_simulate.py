@@ -16,8 +16,8 @@ import shutil
 import pickle
 warnings.simplefilter(action='ignore', category=FutureWarning) # not to see futurewarning warning
 
-Simulate = True
-Train = False
+Simulate = False
+Train = True
 
 if Simulate:
     from src.data_DynamicDQNAgent_sim import DynamicDQNAgent
@@ -32,7 +32,7 @@ NUM_SCENARIOS = 433 #ONLY FOR TRAINING
 boltzmann_decay_end_state = NUM_EPOCHS*SCENARIO_ITERATION*NUM_SCENARIOS // 2 # multiply it by episode numbers per num epochs 
 
 MODEL_LEVEL1 = 99 # Model number of the level1 DQN
-MODEL_LEVEL2 = 95 # Model number of the level2 DQN
+MODEL_LEVEL2 = 99 # Model number of the level2 DQN
 MODEL_LEVEL3 = 99 # Model number of the level3 DQN
 MODEL_DYNAMIC = 99  # Model number of the dynamic DQN
 
@@ -208,10 +208,10 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
     wv = 10 * scale * performance # Velocity
     we = 5 * scale #*performance # Effort
     wh = 5 * scale # Headway
-    wnm = 50 * scale #*performance # Not Merging
+    wnm = 5 * scale #*performance # Not Merging
     ws = 30 * scale # 100  #  *performance # Velocity Less than 2.25m/s or Stopping on Lane-0 with dist_end_merging less than far distance
-    w7 = 30 * scale #TODO tune
-    w8 = -150 * scale #TODO tune
+    w7 = 100 * scale #TODO tune
+    w8 = -50 * scale #TODO tune
 
     # Collision parameter
     c = 0
@@ -302,14 +302,20 @@ def get_reward(crash, state_messages, ego_velocity, ego_lane, fc_d, dist_end_mer
                 if fc_d >= Params.far_distance:
                     s = -1  # Penalize for not accelerating or preparing to merge
 
-    lambda_x = 0.05
     ox = 0
+
+    # lambda_x = 0.05
+    # if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
+    #     frechet_prev = abs(simulated_trajectory[-2] - real_trajectory[-2])
+    #     frechet_now = abs(simulated_trajectory[-1] - real_trajectory[-1])
+
+    #     ox = (frechet_prev-frechet_now) - lambda_x * frechet_now
+
+    F_MAX = 20.0
     if len(simulated_trajectory) >= 2 or len(real_trajectory) >= 2:
-        frechet_prev = abs(simulated_trajectory[-2] - real_trajectory[-2])
         frechet_now = abs(simulated_trajectory[-1] - real_trajectory[-1])
-
-        ox = (frechet_prev-frechet_now) - lambda_x * frechet_now
-
+        d = min(frechet_now, F_MAX)
+        ox = -(d / F_MAX) # normalize between -1 and 0
 
 
     # Calibration term for y-axis (lane offset oy)
@@ -811,7 +817,7 @@ def run_episode(ego_log, total_timesteps, final_state_df, episode_no, run_no, eg
             last_ego_row.to_csv(f, index=False, header=f.tell() == 0)  # Add header only if file is empty
 
         # Perform experience replay and update the model
-        if total_timesteps > Params.replay_start_size:
+        if total_timesteps > Params.replay_start_size and total_timesteps % 4 == 0:
             loss = DYNAMIC_AGENT.replay(Params.batch_size)
             q_loss_table.append(loss[0])
 

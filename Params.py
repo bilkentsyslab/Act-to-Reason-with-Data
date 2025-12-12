@@ -56,7 +56,7 @@ class Params:
 
     replay_start_size = 500 # TODO
     batch_size = 32
-    target_up = 1000 # TODO
+    target_up = 500 # TODO
     
     actions = {0:["maintain",0,0],
                1:["accelerate", accel_rate, 0],
